@@ -1,10 +1,82 @@
+      // Initial array of cartoons
+      var cartoons = [];
 
- var  queryURL = "https://api.giphy.com/v1/gifs/search?q=cartoons&limit=10&api_key=3AXqG4jkC1ZNAYMpx3Zb8NWez16X4CLy"
-$.ajax({
-    url: queryURL,
-    method: "GET"
-  }).then(function(response) {
-    console.log(response);
-  });
+      // function to display the giffs
+      function displayCartoonInfo() {
 
-  
+        var cartoon = $(this).attr("data-cartoon");
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=cartoon&limit=10&api_key=3AXqG4jkC1ZNAYMpx3Zb8NWez16X4CLy"
+        // Creating an AJAX request
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).then(function(response) {
+          console.log(response);
+
+            var results = response.data;
+
+            for (var i = 0; i < results.length; i++) {
+          // Creating a div to hold the cartoons
+          var cartoonDiv = $("<div class='cartoon'>");
+
+          // Storing the rating data
+          var rating = results[i].rating;
+
+          // Creating an element to have the rating displayed
+          var pOne = $("<p>").text("Rating: " + rating);
+
+          // Displaying the rating
+          cartoonDiv.append(pOne);
+
+          // Retrieving the URL for the image
+          var imgURL = results[i].images.fixed_height.url;
+
+          // Creating an element to hold the image
+          var image = $("<img>").attr("src", imgURL);
+
+          // Appending the image
+          cartoonDiv.append(image);
+
+          // Putting the new giffs infront of the previous ones
+          $("#cartoons-view").prepend(cartoonDiv);
+            }
+        });
+
+      }
+
+      // Function for the new buttons
+      function renderButtons() {
+
+        // to prevent it from creating the same button multiple times
+        $("#buttons-view").empty();
+
+        // Looping through the array of cartoons
+        for (var i = 0; i < cartoons.length; i++) {
+
+          // generating buttons for each cartoon in the array
+          var button = $("<button>");
+          button.addClass("cartoon-btn");
+          button.attr("data-name", cartoons[i]);
+          button.text(cartoons[i]);
+          $("#buttons-view").append(button);
+        }
+      }
+
+      // This function  is for when cartoon button is clicked
+      $("#add-cartoon").on("click", function(event) {
+        event.preventDefault();
+        // This line grabs the input from the textbox
+        var cartoon = $("#cartoon-input").val().trim();
+
+        // Adding cartoon from the textbox to our array
+        cartoons.push(cartoon);
+
+        renderButtons();
+      });
+
+      // Adding a click event listener to all elements with a class of "cartoon-btn"
+      $(document).on("click", ".cartoon-btn", displayCartoonInfo);
+
+      // Calling the renderButtons function to display the intial buttons
+      renderButtons();
+
