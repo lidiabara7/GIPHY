@@ -5,7 +5,7 @@
       function displayCartoonInfo() {
 
         var cartoon = $(this).attr("data-cartoon");
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=cartoon&limit=10&api_key=3AXqG4jkC1ZNAYMpx3Zb8NWez16X4CLy"
+        var queryURL = "http://api.giphy.com/v1/gifs/search?q=cartoon&limit=10&api_key=3AXqG4jkC1ZNAYMpx3Zb8NWez16X4CLy"
         // Creating an AJAX request
         $.ajax({
           url: queryURL,
